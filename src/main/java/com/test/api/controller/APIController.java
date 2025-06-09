@@ -17,6 +17,9 @@ public class APIController {
           new CheckList(2, "Banana", 5),
           new CheckList(3, "Melância", 41)));
 
+  // Começa com o maior ID atual + 1
+  private int nextId = 4;
+
   @GetMapping("/api/check")
   public List<CheckList> check() {
     return testDB;
@@ -24,6 +27,7 @@ public class APIController {
 
   @PostMapping("/api/create")
   public void createItem(@RequestBody CheckList item) {
+    item.setId(nextId++);  // atribuição automática do ID
     testDB.add(item);
   }
 
@@ -31,6 +35,7 @@ public class APIController {
   public void editItem(@PathVariable int id, @RequestBody CheckList updatedItem) {
     for (int i = 0; i < testDB.size(); i++) {
       if (testDB.get(i).getId() == id) {
+        updatedItem.setId(id);  // garante que o ID original é mantido
         testDB.set(i, updatedItem);
         break;
       }
